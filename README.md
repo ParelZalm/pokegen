@@ -1,0 +1,2 @@
+# pokegen
+gen now
