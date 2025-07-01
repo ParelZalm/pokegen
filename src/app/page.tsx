@@ -1,10 +1,17 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import {Weather} from "@/components/weather/Weather";
+import {fetchWeather} from "@/utils/fetchWeather";
 
-export default function Home() {
+export default async function Home() {
+  // eindhoven
+  const latitude = 51.4408;
+  const longitude = 5.4778;
+  const weather = await fetchWeather(latitude, longitude);
   return (
     <div className={styles.page}>
       <main className={styles.main}>
+        <Weather weather={weather} />
         <Image
           className={styles.logo}
           src="/next.svg"
