@@ -2,7 +2,6 @@ import styles from "./page.module.css";
 import {Weather} from "@/components/Weather/Weather";
 import {fetchWeather} from "@/utils/fetchWeather";
 import {fetchGeoLocation} from "@/utils/fetchGeoLocation";
-
 export default async function Home() {
   // eindhoven
   const latitude = 51.4408;

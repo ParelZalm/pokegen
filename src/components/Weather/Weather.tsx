@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react';
 import styles from './weather.module.scss';
 
@@ -5,6 +7,7 @@ type WeatherProps = {
 	weather: {
 		hourly?: {
 			temperature2m: number[];
+			uvIndex: number[];
 			time: string[];
 		}
 	} | null;
@@ -13,13 +16,9 @@ type WeatherProps = {
 
 export const Weather = ({weather, city}: WeatherProps) => {
 	const currentHour = new Date().getHours();
-	if (!weather) return <div>Loading...</div>;
+	if (!weather || !weather.hourly) return <div>Loading...</div>;
 
-	const currentDeg = typeof weather.hourly?.temperature2m[currentHour] === 'number' ?
-		weather.hourly?.temperature2m[currentHour].toFixed(1)
-		:
-		'N/A';
-	console.log('Current hour:', currentHour);
+	console.log(weather)
 
 	const renderHourRow = (index: number) => {
 		const hourIndex = currentHour + index;
@@ -29,17 +28,18 @@ export const Weather = ({weather, city}: WeatherProps) => {
 		return (
 			<div key={hourIndex} className={styles.hour}>
 				<div>{`${timeHour}:00`}</div>
-				<div>{temp.toFixed(1)}°C</div>
+				<div>{temp.toFixed(1)}</div>
 			</div>
 		);
 	};
 
-	console.log('Weather data:', weather);
-
 	return (
 		<div className={styles.container}>
-			<p>Weather</p>
-			<h1>{currentDeg} degrees</h1>
+			<div className={styles.heading}>
+				<p>Weather</p>
+				<p>UV: {weather.hourly['uvIndex'][currentHour].toFixed(1)}</p>
+			</div>
+			<h1>{weather.hourly['temperature2m'][currentHour].toFixed(1)}</h1>
 			<div className={styles.hourly}>
 				{Array.from({length: 6}, (_, index) => renderHourRow(index + 1))}
 			</div>
