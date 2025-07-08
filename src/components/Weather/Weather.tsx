@@ -2,6 +2,7 @@
 
 import React from 'react';
 import styles from './weather.module.scss';
+import GradientText from "@/components/GradientText/GradientText";
 
 type WeatherProps = {
 	weather: {
@@ -18,7 +19,21 @@ export const Weather = ({weather, city}: WeatherProps) => {
 	const currentHour = new Date().getHours();
 	if (!weather || !weather.hourly) return <div>Loading...</div>;
 
-	console.log(weather)
+	const currentUv = weather.hourly['uvIndex'][currentHour] !== undefined
+		? Number(weather.hourly['uvIndex'][currentHour].toFixed(1))
+		: 0;
+	const uvRadar = (currentUv: number) => {
+		// return currentUv >= 3 ? 'Use protection' : 'No protection needed';
+		return (
+			<GradientText
+				colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
+				animationSpeed={10}
+				showBorder={false}
+			>
+				{currentUv >= 3 ? `Use protection` : 'No protection needed'}
+			</GradientText>
+		)
+	}
 
 	const renderHourRow = (index: number) => {
 		const hourIndex = currentHour + index;
@@ -36,8 +51,7 @@ export const Weather = ({weather, city}: WeatherProps) => {
 	return (
 		<div className={styles.container}>
 			<div className={styles.heading}>
-				<p>Weather</p>
-				<p>UV: {weather.hourly['uvIndex'][currentHour].toFixed(1)}</p>
+				{uvRadar(currentUv)}
 			</div>
 			<h1>{weather.hourly['temperature2m'][currentHour].toFixed(1)}</h1>
 			<div className={styles.hourly}>
